@@ -166,11 +166,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 
     <script>
         function showForm(system) {
-            // সব ফর্ম লুকাও
             document.getElementById('labForm').style.display = 'none';
             document.getElementById('pharmaForm').style.display = 'none';
-
-            // শুধু যেটা ক্লিক করা হয়েছে সেটা দেখাও
             document.getElementById(system + 'Form').style.display = 'block';
         }
 

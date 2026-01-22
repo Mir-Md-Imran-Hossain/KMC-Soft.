@@ -1,23 +1,36 @@
 <?php
 session_start();
-include '../db_Setup/db.php';
+include '../db_Setup/db.php';  // তোমার db.php পাথ
 
-$system = $_POST['system'];
-$email = trim($_POST['email']);
-$password = md5(trim($_POST['password']));
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $system   = $_POST['system'] ?? '';
+    $password = trim($_POST['password'] ?? '');
 
-$sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-$result = $conn->query($sql);
+    // সিম্পল চেক (ডাটাবেস বাদ দিয়ে)
+    $correct_lab    = 'kmc@lab';
+    $correct_pharma = 'kmc@pharma';
 
-if ($result->num_rows > 0) {
-    $row = $result->fetch_assoc();
-    $_SESSION['logged_in'] = true;
-    $_SESSION['system'] = $system;
-    $_SESSION['role'] = $row['role'];
-    header("Location: ../lab_dashboard.php");
-    exit();
-} else {
-    header("Location: index.php?error=1");
-    exit();
+    $is_valid = false;
+    $redirect = '';
+
+    if ($system === 'lab' && $password === $correct_lab) {
+        $is_valid = true;
+        $_SESSION['logged_in'] = true;
+        $_SESSION['system'] = 'lab';
+        $redirect = 'lab_staff_login.php';  // ← এখানে ফোল্ডারের ভিতরে
+    } elseif ($system === 'pharma' && $password === $correct_pharma) {
+        $is_valid = true;
+        $_SESSION['logged_in'] = true;
+        $_SESSION['system'] = 'pharma';
+        $redirect = 'pharma_staff_login.php';  // পরে করবো
+    }
+
+    if ($is_valid) {
+        header("Location: $redirect");
+        exit();
+    } else {
+        header("Location: ../login_common.php?error=1");
+        exit();
+    }
 }
 ?>
