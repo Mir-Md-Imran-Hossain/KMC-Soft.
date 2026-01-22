@@ -3,9 +3,10 @@ session_start();
 
 // যদি লগইন না করা থাকে → কমন লগইন পেজে ফিরে যাও
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSION['system'] !== 'lab') {
-    header("Location: login_system/login_common.php");
+    header("Location: login_common.php");
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="bn">
@@ -70,5 +71,8 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true || $_SESSI
             <a href="login_system/logout.php">লগআউট করুন</a>
         </div>
     </div>
+    <div class="logout">
+    <a href="../login_system/logout.php">লগআউট করুন (মূল পেজে ফিরে যান)</a>
+</div>
 </body>
 </html>

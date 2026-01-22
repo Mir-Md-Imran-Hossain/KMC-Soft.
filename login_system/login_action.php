@@ -1,35 +1,24 @@
 <?php
 session_start();
-include '../db_Setup/db.php';  // তোমার db.php পাথ
+include '../../db_Setup/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $system   = $_POST['system'] ?? '';
-    $password = trim($_POST['password'] ?? '');
+    $system = $_POST['system'];
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
 
-    // সিম্পল চেক (ডাটাবেস বাদ দিয়ে)
-    $correct_lab    = 'kmc@lab';
-    $correct_pharma = 'kmc@pharma';
-
-    $is_valid = false;
-    $redirect = '';
-
-    if ($system === 'lab' && $password === $correct_lab) {
-        $is_valid = true;
+    if ($system === 'lab' && $email === 'kmc@lab' && $password === 'kmc@lab') {
         $_SESSION['logged_in'] = true;
         $_SESSION['system'] = 'lab';
-        $redirect = 'lab_staff_login.php';  // ← এখানে ফোল্ডারের ভিতরে
-    } elseif ($system === 'pharma' && $password === $correct_pharma) {
-        $is_valid = true;
+        header("Location: lab_staff_login.php");
+        exit();
+    } elseif ($system === 'pharma' && $email === 'kmc@pharma' && $password === 'kmc@pharma') {
         $_SESSION['logged_in'] = true;
         $_SESSION['system'] = 'pharma';
-        $redirect = 'pharma_staff_login.php';  // পরে করবো
-    }
-
-    if ($is_valid) {
-        header("Location: $redirect");
+        header("Location: pharma_staff_login.php");
         exit();
     } else {
-        header("Location: ../login_common.php?error=1");
+        header("Location: ../../login_common.php?error=1");
         exit();
     }
 }

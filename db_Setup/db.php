@@ -1,8 +1,8 @@
 <?php
 $servername = "localhost";
-$username   = "root";
-$password   = "root";           // তোমার পাসওয়ার্ড (যদি খালি হয় তাহলে "")
-$dbname     = "kmc_soft_database"; // তোমার ডাটাবেস নাম
+$username = "root";
+$password = "root"; // তোমার root পাসওয়ার্ড লিখো (যদি খালি হয়, তাহলে "")
+$dbname = "kmc_soft_database";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {

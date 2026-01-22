@@ -1,11 +1,10 @@
 <?php
 session_start();
 
-// যদি আগে থেকে লগইন করা থাকে → সরাসরি স্টাফ লগইন পেজে যাও
 if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
     if ($_SESSION['system'] === 'lab') {
         header("Location: login_system/lab_staff_login.php");
-    } elseif ($_SESSION['system'] === 'pharma') {
+    } else {
         header("Location: login_system/pharma_staff_login.php");
     }
     exit();
@@ -16,7 +15,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMC - লগইন</title>
+    <title>MIR Enterprise - লগইন</title>
     <style>
         body {
             margin: 0;
@@ -27,6 +26,7 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
             justify-content: center;
             align-items: center;
             font-family: sans-serif;
+            position: relative;
         }
         .container {
             text-align: center;
@@ -93,11 +93,11 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         }
         .eye-icon {
             position: absolute;
-            right: 12px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            font-size: 22px;
+            font-size: 24px;
         }
         button[type="submit"] {
             width: 100%;
@@ -120,20 +120,28 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
             font-size: 16px;
             margin-top: 10px;
         }
+        .admin-slider {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: move;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>KMC</h1>
+        <h1>MIR Enterprise</h1>
 
         <div class="buttons">
             <button class="btn btn-lab" onclick="showForm('lab')">KMC LAB</button>
             <button class="btn btn-pharma" onclick="showForm('pharma')">KMC Pharma</button>
         </div>
 
-        <!-- KMC LAB ফর্ম -->
         <div id="labForm" class="login-form">
-            <form method="post" action="login_action.php">
+            <form method="post" action="login_system/login_action.php">
                 <input type="hidden" name="system" value="lab">
                 <input type="text" name="email" value="kmc@lab" readonly>
                 <div class="password-container">
@@ -144,9 +152,8 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
             </form>
         </div>
 
-        <!-- KMC Pharma ফর্ম -->
         <div id="pharmaForm" class="login-form">
-            <form method="post" action="login_action.php">
+            <form method="post" action="login_system/login_action.php">
                 <input type="hidden" name="system" value="pharma">
                 <input type="text" name="email" value="kmc@pharma" readonly>
                 <div class="password-container">
@@ -157,12 +164,12 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
             </form>
         </div>
 
-        <?php
-        if (isset($_GET['error'])) {
-            echo '<div class="error">ভুল পাসওয়ার্ড দিয়েছেন। আবার চেষ্টা করুন।</div>';
-        }
-        ?>
+        <div class="error">
+            <?php if (isset($_GET['error'])) echo "ভুল পাসওয়ার্ড"; ?>
+        </div>
     </div>
+
+    <div class="admin-slider" id="adminSlider" draggable="true" ondragend="checkSlide()">admin</div>
 
     <script>
         function showForm(system) {
@@ -174,6 +181,14 @@ if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true) {
         function togglePassword(id) {
             var field = document.getElementById(id);
             field.type = (field.type === 'password') ? 'text' : 'password';
+        }
+
+        function checkSlide() {
+            var slider = document.getElementById('adminSlider');
+            var mir = document.querySelector('h1');
+            if (slider.getBoundingClientRect().left < mir.getBoundingClientRect().right) {
+                window.location.href = "admin_system/admin_login.php";
+            }
         }
     </script>
 </body>
